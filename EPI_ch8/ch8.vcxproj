@@ -19,10 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{3FA5C4A0-6636-48E6-9DFE-71BCD436C37F}</ProjectGuid>
+    <ProjectGuid>{1587C786-D705-4B2F-BE15-6AD458986170}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>EPI_ch5</RootNamespace>
+    <RootNamespace>ch8</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>EPI_ch8</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
