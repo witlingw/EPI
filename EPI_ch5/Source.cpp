@@ -2,8 +2,7 @@
 
 using namespace std;
 
-/* 5.8 Reverse Digit */
-#pragma region
+#pragma region 5.8 Reverse Digit
 
 int ReverseDigit(int x) {
 	int result = 0;
@@ -33,6 +32,8 @@ void ReverseDigitTest() {
 void main() {
 	// 5.8
 	ReverseDigitTest();
+
+
 
 	cout << "\nEND." << endl;
 	return;
