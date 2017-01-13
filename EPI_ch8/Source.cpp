@@ -162,26 +162,27 @@ public:
 
 	/* 8.2 Reverse Sublist */
 	void ReverseSublist(int s, int f) {
-		shared_ptr<ListNode<T>> it_prec = At(s-1);	// node before the cut
-		shared_ptr<ListNode<T>> it_f = At(f);
-		
+		if (s < f) {
+			shared_ptr<ListNode<T>> it_prec = At(s - 1);	// node before the cut
+			shared_ptr<ListNode<T>> it_f = At(f);
 
-		if (it_prec && it_f) {
-			// cut the substring
-			shared_ptr<ListNode<T>> it_next = it_f->next;		// first node after the sublist
-			it_f->next = nullptr;
+			if (it_prec && it_f) {
+				// cut the substring
+				shared_ptr<ListNode<T>> it_next = it_f->next;		// first node after the sublist
+				it_f->next = nullptr;
 
-			shared_ptr<ListNode<T>> it_s;
-			while (it_prec->next) {
-				// pop it_s
-				it_s = it_prec->next;
-				it_prec->next = it_s->next;
-				// connect it_s to the end
-				it_s->next = it_next;
-				it_next = it_s;
+				shared_ptr<ListNode<T>> it_s;
+				while (it_prec->next) {
+					// pop it_s
+					it_s = it_prec->next;
+					it_prec->next = it_s->next;
+					// connect it_s to the end
+					it_s->next = it_next;
+					it_next = it_s;
+				}
+
+				it_prec->next = it_f;
 			}
-
-			it_prec->next = it_f;
 		}
 	}
 };
