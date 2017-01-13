@@ -75,6 +75,14 @@ public:
 		tail = dumb_head;
 	}
 
+	// if index out of range returns nullptr
+	shared_ptr<ListNode<T>> At(int n) {
+		shared_ptr<ListNode<T>> it = dumb_head;
+		for (int i = 0; i < n && it; i++) {
+			it = it->next;
+		}
+		return it;
+	}
 
 	/*** friend functions ***/
 	
@@ -104,13 +112,7 @@ public:
 		while (!L1.IsEmpty() && !L2.IsEmpty()) {
 			L3.Append((L1.dumb_head->next->data <= L2.dumb_head->next->data) ? L1.PopFront() : L2.PopFront());
 		}
-		// append remaining items
-		cout << (L1.IsEmpty() ? "L1 is empty":"L1 isn't empty.") << endl;
-		cout << (L2.IsEmpty() ? "L2 is empty" : "L2 isn't empty.") << endl;
-		if (!L1.IsEmpty())
-			L3.Append(L1);
-		else if (!L2.IsEmpty())
-			L3.Append(L2);
+		L3.Append(!L1.IsEmpty()? L1 : L2);
 
 		/*
 		shared_ptr<ListNode<T>> it1 = L1.dumb_head;
@@ -157,33 +159,71 @@ public:
 
 		return L3;
 	}
+
+	/* 8.2 Reverse Sublist */
+	void ReverseSublist(int s, int f) {
+		shared_ptr<ListNode<T>> it_prec = At(s-1);	// node before the cut
+		shared_ptr<ListNode<T>> it_f = At(f);
+		
+
+		if (it_prec && it_f) {
+			// cut the substring
+			shared_ptr<ListNode<T>> it_next = it_f->next;		// first node after the sublist
+			it_f->next = nullptr;
+
+			shared_ptr<ListNode<T>> it_s;
+			while (it_prec->next) {
+				// pop it_s
+				it_s = it_prec->next;
+				it_prec->next = it_s->next;
+				// connect it_s to the end
+				it_s->next = it_next;
+				it_next = it_s;
+			}
+
+			it_prec->next = it_f;
+		}
+	}
 };
 
+void ReverseSublistTest() {
+	LinkedList<int> L;
+	for (int i = 1; i <= 10; i++) {
+		L.Insert(i);
+	}
+	cout << "L = " << L << endl;
+	L.ReverseSublist(3, 6);
+	cout << "Reversing sublist..." << endl;
+	cout << "L = " << L << endl;
+}
 
 
 int main() {
-	/* 8.1 */
-	LinkedList<int> list_odd;
-	for (int i = 1; i < 10; i += 2) {
-		list_odd.Insert(i);
-	}
-	LinkedList<int> list_even;
-	for (int i = 0; i < 10; i += 2) {
-		list_even.Insert(i);
-	}
-	
-	list_even.Append(make_shared<ListNode<int>>(12));
-	list_odd.Append(make_shared<ListNode<int>>(11));
-	list_odd.Append(make_shared<ListNode<int>>(13));
+	///* 8.1 */
+	//LinkedList<int> list_odd;
+	//for (int i = 1; i < 10; i += 2) {
+	//	list_odd.Insert(i);
+	//}
+	//LinkedList<int> list_even;
+	//for (int i = 0; i < 10; i += 2) {
+	//	list_even.Insert(i);
+	//}
+	//
+	//list_even.Append(make_shared<ListNode<int>>(12));
+	//list_odd.Append(make_shared<ListNode<int>>(11));
+	//list_odd.Append(make_shared<ListNode<int>>(13));
 
-	cout << "list_even = " << list_even << endl;
-	cout << "list_odd = " << list_odd << endl;
+	//cout << "list_even = " << list_even << endl;
+	//cout << "list_odd = " << list_odd << endl;
 
-	LinkedList<int> list_merged = mergeLists(list_odd, list_even);
+	//LinkedList<int> list_merged = mergeLists(list_odd, list_even);
 
-	cout << "list_even = " << list_even << endl;
-	cout << "list_odd = " << list_odd << endl;
-	cout << "list_merged = " << list_merged << endl;
+	//cout << "list_even = " << list_even << endl;
+	//cout << "list_odd = " << list_odd << endl;
+	//cout << "list_merged = " << list_merged << endl;
+
+	/* 8.2 */
+	ReverseSublistTest();
 
 	return 0;
 }
