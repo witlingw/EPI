@@ -34,27 +34,40 @@ public:
 	}
 
 	void InsertAfter(const shared_ptr<ListNode<T>> it, const shared_ptr<ListNode<T>> new_node) {
-		if (it == tail) {
-			tail = new_node;
+		if (new_node) {
+			if (it == tail) {
+				tail = new_node;
+			}
+			new_node->next = it->next;
+			it->next = new_node;
 		}
-		new_node->next = it->next;
-		it->next = new_node;
 	}
 
 	void Append(const shared_ptr<ListNode<T>> new_node) {
 		InsertAfter(tail, new_node);
 	}
 
-	void DeleteAfter(const shared_ptr<ListNode<T>> it) {
+	void Append(LinkedList<T>& L) {
+		tail->next = L.dumb_head->next;
+		tail = L.tail;
+		L.Clear();
+	}
+
+	shared_ptr<ListNode<T>> RemoveAfter(shared_ptr<ListNode<T>> it) {
+		shared_ptr<ListNode<T>> it_removed = it->next;
 		if (it != tail) {
-			if (it->next != tail) {
-				it->next = it->next->next;
-			}
-			else {
-				it->next = nullptr;
+			// it_removed exists
+			it->next = it_removed->next;
+			if (tail == it_removed) {
+				// it becomes the new tail
 				tail = it;
 			}
 		}
+		return it_removed;
+	}
+
+	shared_ptr<ListNode<T>> PopFront() {
+		return RemoveAfter(dumb_head);
 	}
 
 	void Clear() {
@@ -87,6 +100,21 @@ public:
 	/* 8.1 Merge sorted lists (ascending) */ 
 	static friend LinkedList<T> mergeLists(LinkedList<T>& L1, LinkedList<T>& L2) {
 		LinkedList<T> L3;
+
+		while (!L1.IsEmpty() && !L2.IsEmpty()) {
+			L3.Append((L1.dumb_head->next->data <= L2.dumb_head->next->data) ? L1.PopFront() : L2.PopFront());
+		}
+		// append remaining items
+		cout << (L1.IsEmpty() ? "L1 is empty":"L1 isn't empty.") << endl;
+		cout << (L2.IsEmpty() ? "L2 is empty" : "L2 isn't empty.") << endl;
+		if (!L1.IsEmpty())
+			L3.Append(L1);
+		else if (!L2.IsEmpty())
+			L3.Append(L2);
+
+		/*
+		shared_ptr<ListNode<T>> it1 = L1.dumb_head;
+		shared_ptr<ListNode<T>>	it2 = L2.dumb_head;
 
 		if (!L1.IsEmpty() && !L2.IsEmpty()) {
 			shared_ptr<ListNode<T>> it1 = L1.dumb_head->next;
@@ -125,7 +153,7 @@ public:
 		}
 
 		L1.Clear();
-		L2.Clear();
+		L2.Clear();*/
 
 		return L3;
 	}
