@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stack>
+#include <vector>
 
 using namespace std;
 
@@ -86,12 +87,100 @@ void MaxTest() {
 
 #pragma region QUEUE
 
+/* 9.8 Circular Queue */
+template <typename T>
+class CircularQueue {
+public:
+	CircularQueue(size_t max_size) {
+		_maxSize = max_size;
+		_data.resize(_maxSize);
+		_currentSize = 0;
+		_front = 0;
+		_back = 0;
+	}
+
+	void Enqueue(T val) {
+		_data[_back] = val;
+		_back++;
+		_currentSize++;
+
+		if (_currentSize == _maxSize) {
+			size_t new_size =_maxSize*2;
+			_data.resize(new_size);
+
+			if (_front == _back) {
+				// copy all the elements at the front of the queue at the end of the vector
+				for (int i = _maxSize - 1, j = new_size - 1; i >= _front; i--, j--) {
+					_data[j] = _data[i];
+					_data[i] = 0; // DEBUG
+				}
+				_front += _maxSize;
+			}
+			_maxSize = new_size;
+		}		
+
+		if (_back == _maxSize) {
+			_back = 0;
+		}
+	}
+
+	T Dequeue() {
+		if (_currentSize <= 0) {
+			throw length_error("Dequeue(): queue is empty.");
+		}
+
+		T val = _data[_front];
+		_data[_front] = 0; // DEBUG
+		_front++;
+		if (_front == _maxSize) {
+			_front = 0;
+		}
+		_currentSize--;
+		return val;
+	}
+
+	size_t Size() {
+		return _currentSize;
+	}
+
+private:
+	int _front, _back;
+	size_t _currentSize;
+	size_t _maxSize;
+	vector<T> _data;
+};
+
+
+/* 9.8 */
+void CircularQueueTest() {
+	CircularQueue<int> Q(3);
+	for (int i = 1; i <= 4; i++) {
+		Q.Enqueue(i);
+	}
+	// Q = 1 2 3 4 _ _ 
+	Q.Dequeue();	// Q = _ 2 3 4 _ _
+	cout << "Dequeue: " << Q.Dequeue() << endl; // Q = _ _ 3 4 _ _
+	Q.Dequeue();	// Q = _ _ _ 4 _ _
+
+	for (int i = 5; i <= 8; i++) {
+		Q.Enqueue(i);
+	}
+	// Q = 7 8 _ 4 5 6 
+
+	Q.Enqueue(9);
+	// Q = 7 8 9 _ _ _ _ _ _ 4 5 6
+
+	return;
+}
 
 #pragma endregion
 
 void main() {
 	/* 9.1 */
-	MaxTest();
+	//MaxTest();
+
+	/* 9.8 */
+	CircularQueueTest();
 
 	return;
 }
