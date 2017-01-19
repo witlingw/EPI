@@ -111,7 +111,7 @@ vector<Star> kClosestStars(int k, string filename){
 			stars.push_back(max_heap.top());
 			max_heap.pop();
 		}
-		reverse(stars.begin, stars.end);
+		reverse(stars.begin(), stars.end());
 		return stars;
 	}
 	else throw new runtime_error("It was not possible to open the file:" + filename + "\n");
